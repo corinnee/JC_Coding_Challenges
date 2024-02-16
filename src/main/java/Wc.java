@@ -13,9 +13,7 @@ public class Wc {
             throw new IllegalArgumentException(file + " does not exist");
         }
         // If a file does exist the size is returned using length() method.
-        long size = file.length();
-        System.out.print(size + " " + fileName);
-        return size;
+        return file.length();
     }
 
     // ####     Step 2 | l                      ####
@@ -34,11 +32,11 @@ public class Wc {
         return lines;
     }
 
-    public static void w(String fileName){
+    public static long w(String fileName){
         // open file in read mode
         File file = new File(fileName);
-        int count = 0;
-        int empty = 0;
+        long count = 0;
+        long empty = 0;
 
         try(Scanner input = new Scanner(file)){
             // initalise variables
@@ -60,11 +58,26 @@ public class Wc {
         } catch (IOException e){
             e.printStackTrace();
         }
-        System.out.println(count-empty + " " + fileName);
+        return count-empty;
     }
 
-    public static void mChar(String fileName){
+    public static long mChar(String fileName){
+        File file = new File(fileName);
+        long count = 0;
 
+        try(Scanner input = new Scanner(file, "UTF_8")){
+            // initalise variables
+            String line;
+
+            // count every character (including spaces)
+            while (input.hasNextLine()){
+                line = input.nextLine();
+                count += line.length(); //add length of entire line
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return count;
     }
 
 
@@ -72,12 +85,11 @@ public class Wc {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter command (-c <filename>):");
+        System.out.print(">ccwc ");
         String input = scanner.nextLine();
-
+        // TODO : some sort of try catch for errors
         //Parse input
         String[] inputArgs = input.split("\\s+");
-
         if (inputArgs.length != 2){
             System.out.println("Usage: ccwc -c <filename>");
         }
@@ -85,20 +97,25 @@ public class Wc {
         String fileName = inputArgs[1];
 
         // Call cRun i command is "-c"
-        if (inputArgs[0].equals("-c")) {
-            c(fileName);
-        } else if (inputArgs[0].equals("l")) {
-            long lines = l(fileName);
-            System.out.println(lines + " " + fileName);
-        } else if (inputArgs[0].equals("-w")) {
-            w(fileName);
-        } else if (inputArgs[0].equals("-m")) {
-            mChar(fileName);
-
-        } else {
-            System.out.println("Invalid command");
+        switch (inputArgs[0]) {
+            case "-c":
+                System.out.println(c(fileName) + " " + fileName);
+                break;
+            case "l":
+                long lines = l(fileName);
+                System.out.println(lines + " " + fileName);
+                break;
+            case "-w":
+                System.out.println(w(fileName) + " " + fileName);
+                break;
+            case "-m":
+                System.out.println(mChar(fileName) + " " + fileName);
+                break;
+            default:
+                // default output
+                System.out.println("   " + c(fileName) + " " + l(fileName) + " " + w(fileName) + " " + fileName);
+                break;
         }
-
         scanner.close();
     }
 }
