@@ -32,6 +32,7 @@ public class Wc {
         return lines;
     }
 
+    // ####     Step 3 | -w                    ####
     public static long w(String fileName){
         // open file in read mode
         File file = new File(fileName);
@@ -61,6 +62,7 @@ public class Wc {
         return count-empty;
     }
 
+    // ####     Step 4 | -m                    ####
     public static long mChar(String fileName){
         File file = new File(fileName);
         long count = 0;
